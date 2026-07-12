@@ -1,0 +1,351 @@
+ :root{
+    --bg-0:#070c14;
+    --bg-1:#0d1626;
+    --panel:#111d33;
+    --grid-line: rgba(112,148,196,0.07);
+    --ink-0:#e9eef7;
+    --ink-1:#8fa0bd;
+    --ink-2:#5b6c8a;
+    --lumen-1:#37e0b8;
+    --lumen-2:#1ea988;
+    --lumen-glow: rgba(55,224,184,0.55);
+    --spore: #ff8a5c;
+    --spore-glow: rgba(255,138,92,0.6);
+    --amber:#f2b84b;
+    --danger:#ff5c72;
+    --radius: 14px;
+    --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+  }
+
+  @font-face{
+    font-family:'Space Grotesk';
+    src: local('Space Grotesk');
+  }
+
+  *{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  button{ touch-action: manipulation; }
+
+  html,body{
+    margin:0; padding:0; height:100%;
+    background: radial-gradient(ellipse at 50% -10%, #10203a 0%, var(--bg-0) 55%);
+    color: var(--ink-0);
+    font-family: var(--font-display);
+    overflow-x:hidden;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+    touch-action: none;
+  }
+
+  #app{
+    min-height: 100vh;
+    min-height: 100dvh;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    gap: 10px;
+    touch-action: none;
+  }
+
+  .panel-top{
+    width:100%;
+    max-width:560px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
+
+  .app-main{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    flex:1;
+    min-height:0;
+  }
+
+  /* Short / landscape viewports (phones on their side): board and pad sit side by side */
+  @media (max-height: 500px) and (orientation: landscape){
+    #app{
+      flex-direction: row;
+      align-items:center;
+      justify-content:center;
+      gap: 18px;
+      padding: 8px max(10px, env(safe-area-inset-right)) 8px max(10px, env(safe-area-inset-left));
+    }
+    .panel-top{
+      width:auto;
+      max-width: 150px;
+      align-items:flex-start;
+      gap:12px;
+    }
+    .brand{ flex-direction:column; align-items:flex-start; gap:2px; margin-top:0; }
+    .brand .sub{ display:none; }
+    .hud{ flex-direction:column; align-items:flex-start; gap:8px; max-width:none; }
+    .hud .stat.right{ align-items:flex-start; }
+    .level-track{ display:none; }
+    .app-main{
+      flex-direction: row;
+      width:auto;
+      gap: 14px;
+      max-height: 94vh;
+      max-height: 94dvh;
+    }
+    .board-wrap{
+      max-width:none;
+      width: min(94vh, 94dvh, 70vw);
+      height: min(94vh, 94dvh, 70vw);
+      aspect-ratio: 1/1;
+      flex-shrink:0;
+    }
+    .controls{ margin-top:0; max-width:none; width:auto; }
+    .desktop-hint{ display:none; }
+  }
+
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-top: 4px;
+    user-select:none;
+  }
+  .brand .mark{
+    width:10px;height:10px;border-radius:3px;
+    background: var(--lumen-1);
+    box-shadow: 0 0 10px 2px var(--lumen-glow);
+  }
+  .brand h1{
+    font-size: clamp(20px, 5vw, 26px);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin:0;
+  }
+  .brand .sub{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hud{
+    width:100%;
+    max-width: 560px;
+    display:flex;
+    justify-content: space-between;
+    align-items:flex-end;
+    gap: 10px;
+    font-family: var(--font-mono);
+  }
+  .stat{ display:flex; flex-direction:column; gap:2px; min-width: 62px; }
+  .stat .label{ font-size:10px; letter-spacing:0.12em; color: var(--ink-2); text-transform:uppercase; }
+  .stat .value{ font-size: clamp(18px,4.5vw,24px); font-weight:600; color: var(--ink-0); font-variant-numeric: tabular-nums; }
+  .stat.accent .value{ color: var(--lumen-1); text-shadow: 0 0 12px var(--lumen-glow); }
+  .stat.right{ align-items:flex-end; }
+
+  .level-track{
+    width:100%;
+    max-width:560px;
+    height:4px;
+    border-radius:2px;
+    background: var(--grid-line);
+    overflow:hidden;
+  }
+  .level-track .fill{
+    height:100%;
+    width:0%;
+    background: linear-gradient(90deg, var(--lumen-2), var(--lumen-1));
+    box-shadow: 0 0 8px var(--lumen-glow);
+    transition: width 0.25s ease;
+  }
+
+  .board-wrap{
+    position:relative;
+    width:100%;
+    max-width: 560px;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius);
+    background:
+      radial-gradient(120% 90% at 50% 0%, rgba(55,224,184,0.06), transparent 60%),
+      var(--panel);
+    border: 1px solid rgba(112,148,196,0.14);
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.03);
+    overflow:hidden;
+    touch-action:none;
+  }
+
+  canvas{ display:block; width:100%; height:100%; }
+
+  .overlay{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap: 14px;
+    text-align:center;
+    padding: 24px;
+    background: rgba(7,12,20,0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity:1;
+    transition: opacity 0.25s ease;
+  }
+  .overlay.hidden{ opacity:0; pointer-events:none; }
+  .overlay h2{
+    font-size: clamp(22px,6vw,30px);
+    margin:0;
+    letter-spacing:0.01em;
+  }
+  .overlay p{
+    margin:0;
+    color: var(--ink-1);
+    font-size: 14px;
+    line-height:1.6;
+    max-width: 320px;
+  }
+  .overlay .big-score{
+    font-family: var(--font-mono);
+    font-size: 42px;
+    font-weight:600;
+    color: var(--lumen-1);
+    text-shadow: 0 0 18px var(--lumen-glow);
+  }
+  .overlay .hint{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  button.cta{
+    appearance:none;
+    border:none;
+    cursor:pointer;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing:0.02em;
+    color:#04211a;
+    background: linear-gradient(180deg, var(--lumen-1), var(--lumen-2));
+    padding: 13px 30px;
+    border-radius: 999px;
+    box-shadow: 0 8px 24px -6px var(--lumen-glow);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  button.cta:active{ transform: scale(0.96); box-shadow: 0 4px 14px -6px var(--lumen-glow); }
+
+  .pause-btn{
+    position:absolute; top:10px; right:10px;
+    width:34px;height:34px;
+    border-radius:10px;
+    border:1px solid rgba(112,148,196,0.2);
+    background: rgba(17,29,51,0.7);
+    color: var(--ink-1);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    font-size:14px;
+    z-index:3;
+  }
+  .pause-btn:active{ transform: scale(0.92); }
+
+  .controls{
+    width:100%;
+    max-width:560px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    margin-top: 4px;
+  }
+  .controls .controls-label{
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .dpad{
+    display:grid;
+    grid-template-columns: 58px 58px 58px;
+    grid-template-rows: 58px 58px 58px;
+    gap: 8px;
+  }
+  .dpad button{
+    appearance:none;
+    border:1px solid rgba(112,148,196,0.22);
+    background: linear-gradient(180deg, rgba(23,38,64,0.9), rgba(15,24,42,0.9));
+    border-radius: 16px;
+    color: var(--lumen-1);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    user-select:none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 3px 8px rgba(0,0,0,0.25);
+    transition: background 0.1s ease, border-color 0.1s ease, transform 0.08s ease, box-shadow 0.1s ease;
+  }
+  .dpad button svg{ width: 44%; height: 44%; display:block; pointer-events:none; }
+  .dpad button:active,
+  .dpad button.pressed{
+    background: linear-gradient(180deg, rgba(55,224,184,0.28), rgba(30,169,136,0.22));
+    border-color: var(--lumen-1);
+    box-shadow: 0 0 16px var(--lumen-glow), inset 0 1px 0 rgba(255,255,255,0.06);
+    transform: scale(0.94);
+  }
+  .dpad .up{ grid-column:2; grid-row:1; }
+  .dpad .left{ grid-column:1; grid-row:2; }
+  .dpad .center{ grid-column:2; grid-row:2; border-color:transparent; background:transparent; box-shadow:none; }
+  .dpad .right{ grid-column:3; grid-row:2; }
+  .dpad .down{ grid-column:2; grid-row:3; }
+  .dpad .down svg{ transform: rotate(180deg); }
+  .dpad .left svg{ transform: rotate(-90deg); }
+  .dpad .right svg{ transform: rotate(90deg); }
+
+  .desktop-hint{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-2);
+    letter-spacing: 0.06em;
+    text-align:center;
+  }
+
+  /* Default: assume a mouse, hide the arrow pad. We show it on:
+     - any device that reports real touch capability (phones, tablets, touch laptops)
+     - any narrow-enough viewport, as a safety net for devices whose pointer
+       media features misreport (e.g. some tablets with a trackpad attached) */
+  .dpad, .controls-label{ display:none; }
+  .dpad{ display:none; }
+
+  html.touch .dpad{ display:grid; }
+  html.touch .controls-label{ display:block; }
+  html.touch .desktop-hint{ display:none; }
+
+  @media (pointer: coarse), (hover:none){
+    .dpad{ display:grid; }
+    .controls-label{ display:block; }
+    .desktop-hint{ display:none; }
+  }
+
+  @media (max-width: 900px){
+    .dpad{ display:grid; }
+    .controls-label{ display:block; }
+    .desktop-hint{ display:none; }
+  }
+
+  /* Tablets: bigger, easier-to-hit pad */
+  @media (min-width: 600px) and (max-width: 1100px){
+    .dpad{ grid-template-columns: 74px 74px 74px; grid-template-rows: 74px 74px 74px; gap:10px; }
+    .dpad button{ border-radius:20px; }
+  }
+
+  @media (max-width: 380px){
+    .dpad{ grid-template-columns: 52px 52px 52px; grid-template-rows: 52px 52px 52px; gap:6px; }
+  }
+
+  @media (max-height: 500px) and (orientation: landscape){
+    .dpad{ grid-template-columns: 52px 52px 52px; grid-template-rows: 52px 52px 52px; gap:6px; }
+  }
+
+
+  ::selection{ background: var(--lumen-glow); }
