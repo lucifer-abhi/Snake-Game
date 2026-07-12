@@ -1,13 +1,84 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Snake Game</title>
+</head>
+<body>
+<div id="app">
 
+ <div class="panel-top">
+  <div class="brand">
+    <div class="mark"></div>
+    <span class="sub">a glow-worm arcade</span>
+  </div>
+
+  <div class="hud">
+    <div class="stat">
+      <span class="label">Score</span>
+      <span class="value" id="scoreVal">0</span>
+    </div>
+    <div class="stat accent">
+      <span class="label">Level</span>
+      <span class="value" id="levelVal">1</span>
+    </div>
+    <div class="stat right">
+      <span class="label">Best</span>
+      <span class="value" id="bestVal">0</span>
+    </div>
+  </div>
+
+  <div class="level-track"><div class="fill" id="levelFill"></div></div>
+ </div>
+
+ <div class="app-main">
+  <div class="board-wrap" id="boardWrap">
+    <canvas id="game"></canvas>
+    <button class="pause-btn" id="pauseBtn" aria-label="Pause">❚❚</button>
+
+    <div class="overlay" id="startOverlay">
+      <h2>Wake the worm</h2>
+      <p>Guide it through the dark to feed on drifting spores. Every few bites, it moves a little faster.</p>
+      <button class="cta" id="startBtn">Start</button>
+      <span class="hint" id="startHint">Arrow keys or WASD</span>
+    </div>
+
+    <div class="overlay hidden" id="pauseOverlay">
+      <h2>Paused</h2>
+      <button class="cta" id="resumeBtn">Resume</button>
+    </div>
+
+    <div class="overlay hidden" id="overOverlay">
+      <h2>The light fades</h2>
+      <div class="big-score" id="finalScore">0</div>
+      <p id="overMsg">Run complete.</p>
+      <button class="cta" id="retryBtn">Try again</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <span class="controls-label">Arrow controls</span>
+    <div class="dpad" id="dpad">
+      <button class="up" data-dir="up" aria-label="Move up">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M12 5l-6 6M12 5l6 6"/></svg>
+      </button>
+      <button class="left" data-dir="left" aria-label="Move left">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M12 5l-6 6M12 5l6 6"/></svg>
+      </button>
+      <div class="center"></div>
+      <button class="right" data-dir="right" aria-label="Move right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M12 5l-6 6M12 5l6 6"/></svg>
+      </button>
+      <button class="down" data-dir="down" aria-label="Move down">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M12 5l-6 6M12 5l6 6"/></svg>
+      </button>
+    </div>
+  </div>
+ </div>
+
+  <div class="desktop-hint">Arrow keys / WASD to steer · Space to pause</div>
+
+</div>
+</body>
+</html>
