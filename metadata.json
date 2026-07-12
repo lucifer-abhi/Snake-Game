@@ -1,6 +1,0 @@
-{
-  "name": "Snake Game",
-  "description": "A modern, fully responsive Snake game built with HTML5 Canvas, featuring smooth rendering, sound effects, particles, game modes, and intuitive touch controls.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
